@@ -34,11 +34,12 @@ const Navbar = () => {
               Dashboard
             </a>
             <a
-              href="#footer"
+              href="/pricing"
               className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
             >
-              Credits
+              Pricing
             </a>
+
           </div>
         </nav>
       </div>

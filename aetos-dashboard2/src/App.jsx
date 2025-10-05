@@ -1,8 +1,9 @@
 // src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/LandingPage.jsx"; // <-- Change this
-import Dashboard from "./pages/Dashboard.jsx";   // <-- And this
+import LandingPage from "./pages/LandingPage.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import PlansAndPricing from "./pages/PlansAndPricing.jsx";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/pricing" element={<PlansAndPricing />} />
       </Routes>
     </Router>
   );
