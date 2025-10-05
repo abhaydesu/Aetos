@@ -1,0 +1,12 @@
+flask
+flask-cors
+pymongo
+python-dotenv
+pandas
+requests
+beautifulsoup4
+lxml
+tqdm
+celery[redis]
+google-generativeai
+redis

@@ -1,0 +1,23 @@
+/* src/components/ScrollDownIndicator.css */
+
+.scroll-indicator {
+  display: inline-block;
+  animation: bounce 2s infinite;
+  transition: opacity 0.3s;
+}
+
+.scroll-indicator:hover {
+  opacity: 0.7;
+}
+
+/* Simple bouncing animation */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-15%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
