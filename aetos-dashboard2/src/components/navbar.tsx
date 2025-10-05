@@ -1,4 +1,3 @@
-
 const Navbar = () => {
   return (
     <header className="sticky top-0 w-full z-50">
@@ -9,7 +8,25 @@ const Navbar = () => {
               <img src="/logo.png" alt="" className="h-6" />
             </a>
           </div>
-          <div className="flex gap-5">
+          <div className="flex gap-8">
+            <a
+              href="/"
+              className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
+            >
+              Home
+            </a>
+            <a
+              href="/plans"
+              className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
+            >
+              Plans
+            </a>
+            <a
+              href="/contact"
+              className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
+            >
+              Contact Us
+            </a>
             <a
               href="/dashboard"
               className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
@@ -29,4 +46,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar
+export default Navbar;
