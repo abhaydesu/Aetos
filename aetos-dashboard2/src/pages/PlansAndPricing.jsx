@@ -1,12 +1,9 @@
-// src/pages/PlansAndPricing.jsx
-
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
-// --- Icons ---
 const CheckIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-sky-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -19,7 +16,6 @@ const XIcon = () => (
   </svg>
 );
 
-// --- Animations ---
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
@@ -29,11 +25,10 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.15 } },
 };
 
-// --- Features + Plans ---
 const allFeatures = [
   "Technology queries (monthly quota)",
-  "Global patent database access",
   "Research publication access",
+  "Global patent database access",
   "Automated data aggregation",
   "AI-powered TRL assessment",
   "S-curve forecasting",
@@ -56,7 +51,7 @@ const plans = [
   },
   {
     name: "Professional",
-    price: "₹4,99,999",
+    price: "₹99,999",
     period: "/year",
     description: "Full platform access for DRDO labs",
     features: [
@@ -96,7 +91,6 @@ function PlansAndPricing() {
     <div className="min-h-screen bg-neutral-950 text-neutral-100 inter">
       <Navbar />
 
-      {/* ⬇️ Added extra bottom padding */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-32">
         <motion.div
           className="text-center mb-20"
