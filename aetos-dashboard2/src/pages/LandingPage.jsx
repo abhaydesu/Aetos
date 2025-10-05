@@ -56,13 +56,17 @@ function LandingPage() {
             animate="visible"
             variants={stagger}
           >
-            <motion.h2
-              className="text-4xl md:text-7xl font-extrabold tracking-tight"
-              variants={fadeInUp}
-            >
-              Transform Scattered Data into <br />
-              Strategic Intelligence
-            </motion.h2>
+            <motion.div className="flex flex-col items-center" variants={fadeInUp}>
+              <span className="inline-block mb-4 bg-sky-700/10 text-sky-300 border border-sky-700/30 rounded-full px-3 py-1 text-sm font-medium">AI-Powered Technology Intelligence</span>
+
+              <motion.h2
+                className="text-4xl md:text-7xl font-extrabold tracking-tight"
+                variants={fadeInUp}
+              >
+                <span className="text-sky-400">Transform</span> Scattered Data into <br />
+                Strategic Intelligence
+              </motion.h2>
+            </motion.div>
 
             <motion.p
               className="mt-10 max-w-2xl mx-auto text-lg text-neutral-300"
@@ -73,12 +77,21 @@ function LandingPage() {
             </motion.p>
 
             <motion.div className="mt-8" variants={fadeInUp}>
-              <Link
-                to="/dashboard"
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-neutral-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-sky-600 text-neutral-50 hover:bg-sky-500 h-11 px-8 mt-8"
-              >
-                Get Started
-              </Link>
+              <div className="inline-flex items-center justify-center space-x-3">
+                <Link
+                  to="/dashboard"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-neutral-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-sky-600 text-neutral-50 hover:bg-sky-500 h-11 px-8"
+                >
+                  Get Started
+                </Link>
+
+                <Link
+                  to="/about"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-neutral-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-neutral-900 text-neutral-200 border border-neutral-700 hover:bg-neutral-800 h-11 px-6"
+                >
+                  Watch Demo
+                </Link>
+              </div>
             </motion.div>
           </motion.section>
 
