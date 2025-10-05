@@ -5,6 +5,7 @@ import { Icon } from "../components/ui/Icon";
 import { ScrollDownIndicator } from "../components/ui/ScrollDownIndicator";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
+import FAQs from "../components/FAQs";
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
@@ -29,8 +30,31 @@ const cardVariant = {
 };
 
 function LandingPage() {
+  const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 inter overflow-x-hidden relative">
+      {/* Cursor glow effect */}
+      <div
+        className="pointer-events-none fixed z-50 h-96 w-96 transition-opacity duration-300"
+        style={{
+          left: mousePosition.x - 192,
+          top: mousePosition.y - 192,
+          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.03) 0%, rgba(56, 189, 248, 0.015) 30%, rgba(56, 189, 248, 0.008) 50%, transparent 70%)',
+          filter: 'blur(4px)',
+          borderRadius: '50%',
+        }}
+      />
+
       <motion.div
         className="pointer-events-none absolute inset-0 w-full bg-grid-neutral-800/40"
         style={{
@@ -51,13 +75,13 @@ function LandingPage() {
         {/* Hero Section */}
         <main className="max-w-7xl mt-10 mx-auto px-4 sm:px-6 lg:px-8">
           <motion.section
-            className="text-center pt-20 pb-24"
+            className="text-center pt-10 pb-24"
             initial="hidden"
             animate="visible"
             variants={stagger}
           >
             <motion.div className="flex flex-col items-center" variants={fadeInUp}>
-              <span className="inline-block mb-4 bg-sky-700/10 text-sky-300 border border-sky-700/30 rounded-full px-3 py-1 text-sm font-medium">AI-Powered Technology Intelligence</span>
+              <span className="inline-block mb-8 bg-sky-700/20 text-sky-300 border border-sky-700/30 rounded-full px-5 py-2 text-sm font-medium">AI-Powered Technology Intelligence</span>
 
               <motion.h2
                 className="text-4xl md:text-7xl font-extrabold tracking-tight"
@@ -92,6 +116,29 @@ function LandingPage() {
                   Watch Demo
                 </Link>
               </div>
+            </motion.div>
+          </motion.section>
+
+          {/* Demo Image Section */}
+          <motion.section
+            className="py-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <motion.div
+              className="w-4/5 mx-auto relative"
+              variants={fadeInUp}
+            >
+              <img
+                src="/demo-dashboard.png"
+                alt="AETOS Intelligence Dashboard Demo"
+                className="w-full shadow-2xl"
+                style={{
+                  maskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
+                  WebkitMaskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
+                }}
+              />
             </motion.div>
           </motion.section>
 
@@ -193,6 +240,44 @@ function LandingPage() {
                 <p className="text-neutral-400">
                   Track technology progression with S-curves, detect market convergence, and receive continuous updates on emerging tech signals.
                 </p>
+              </motion.div>
+            </motion.div>
+          </motion.section>
+
+          {/* FAQs Section */}
+          <FAQs />
+
+          {/* CTA Section */}
+          <motion.section
+            className="py-24 text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <motion.div
+              className="bg-gradient-to-r from-sky-900/20 to-neutral-900/20 p-12"
+              variants={fadeInUp}
+            >
+              <motion.h3
+                className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4"
+                variants={fadeInUp}
+              >
+                Ready to Transform Your <span className="text-sky-400">Technology Intelligence?</span>
+              </motion.h3>
+              <motion.p
+                className="text-md text-neutral-400 max-w-2xl mx-auto mb-8"
+                variants={fadeInUp}
+              >
+                Join DRDO in leveraging AI-powered insights for strategic decision-making. 
+                Start your journey with AETOS today and stay ahead of technological trends.
+              </motion.p>
+              <motion.div variants={fadeInUp}>
+                <Link
+                  to="/dashboard"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-medium ring-offset-neutral-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-sky-600 text-neutral-50 hover:bg-sky-500 h-12 px-10"
+                >
+                  Get Started Now
+                </Link>
               </motion.div>
             </motion.div>
           </motion.section>
