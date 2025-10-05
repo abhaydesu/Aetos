@@ -16,16 +16,10 @@ const Navbar = () => {
               Home
             </a>
             <a
-              href="/plans"
+              href="/pricing"
               className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
             >
               Plans
-            </a>
-            <a
-              href="/contact"
-              className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
-            >
-              Contact Us
             </a>
             <a
               href="/dashboard"
@@ -34,11 +28,12 @@ const Navbar = () => {
               Dashboard
             </a>
             <a
-              href="/pricing"
+              href="/contact"
               className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
             >
-              Pricing
+              Contact Us
             </a>
+            
 
           </div>
         </nav>
