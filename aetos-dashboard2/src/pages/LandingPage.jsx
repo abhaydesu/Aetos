@@ -5,6 +5,7 @@ import { Icon } from "../components/ui/Icon";
 import { ScrollDownIndicator } from "../components/ui/ScrollDownIndicator";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
+import FAQs from "../components/FAQs";
 import { motion } from "framer-motion";
 
 const fadeInUp = {
@@ -27,7 +28,7 @@ const cardVariant = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
 };
 
-function InteractiveDemo({ src = "/demo-dashboard.png", hovered }) {
+function InteractiveDemo({ src = "/demo-dashboard.png", hovered, setHovered }) {
   const boxes = [
     { id: "convergence", top: "12%", left: "26.5%", width: "12.5%", height: "3.5%" },
     { id: "trl", top: "39.5%", left: "66.5%", width: "12.5%", height: "3.5%" },
@@ -50,21 +51,58 @@ function InteractiveDemo({ src = "/demo-dashboard.png", hovered }) {
         return (
           <motion.div
             key={b.id}
-            className="absolute rounded-lg pointer-events-none"
+            className="absolute rounded-lg"
             style={{ top: b.top, left: b.left, width: b.width, height: b.height }}
             initial={false}
+            onMouseEnter={() => setHovered(b.id)}
+            onFocus={() => setHovered(b.id)}
+            onMouseLeave={() => setHovered(null)}
+            onBlur={() => setHovered(null)}
             animate={{
-              opacity: active ? 1 : 0,
+              opacity: active ? 1 : 0.02,
               scale: active ? 1.03 : 1,
               boxShadow: active
-                ? "0 0 30px rgba(56,189,248,0.6), 0 0 80px rgba(56,189,248,0.4), 0 0 120px rgba(56,189,248,0.25)"
+                ? "0 18px 48px rgba(56,189,248,0.28), 0 0 80px rgba(56,189,248,0.18)"
                 : "0 0 0 rgba(0,0,0,0)",
             }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          />
+            transition={{ type: "spring", stiffness: active ? 200 : 220, damping: active ? 22 : 26, mass: 0.9 }}
+          >
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: 10,
+                background: active ? "linear-gradient(180deg, rgba(14,165,233,0.06), rgba(14,165,233,0.03))" : "transparent",
+                transition: "background 260ms cubic-bezier(.22,1,.36,1)",
+              }}
+            />
+          </motion.div>
         );
       })}
     </div>
+  );
+}
+
+
+function FeatureCard({ icon: IconComp, title, body, hoveredKey, id, onHover }) {
+  return (
+    <motion.div
+      onMouseEnter={() => onHover(id)}
+      onFocus={() => onHover(id)}
+      onMouseLeave={() => onHover(null)}
+      onBlur={() => onHover(null)}
+      variants={cardVariant}
+      whileHover={{ y: -4, scale: 1.01 }}
+      whileTap={{ scale: 0.995 }}
+      className="flex flex-col items-start relative max-w-sm mx-auto bg-neutral-900/50 border border-neutral-800 p-6"
+    >
+      <FloatingCorners />
+      <div className="mb-4">
+        <IconComp className="h-8 w-8 text-sky-500" />
+      </div>
+      <h4 className="text-xl font-semibold mb-2">{title}</h4>
+      <p className="text-neutral-400">{body}</p>
+    </motion.div>
   );
 }
 
@@ -89,6 +127,7 @@ function FloatingCorners() {
 
 export default function LandingPage() {
   const [hovered, setHovered] = React.useState(null);
+  const [mousePosition, setMousePosition] = React.useState(null);
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 inter overflow-x-hidden relative">
@@ -109,7 +148,7 @@ export default function LandingPage() {
         <main className="max-w-7xl mt-10 mx-auto px-4 sm:px-6 lg:px-8">
           <motion.section className="text-center pt-20 pb-24" initial="hidden" animate="visible" variants={stagger}>
             <motion.h2 className="text-4xl md:text-7xl font-extrabold tracking-tight" variants={fadeInUp}>
-              Transform Scattered Data into <br /> Strategic Intelligence
+              Transform Scattered Data into Strategic Intelligence
             </motion.h2>
             <motion.p className="mt-10 max-w-2xl mx-auto text-lg text-neutral-300" variants={fadeInUp}>
               AETOS is an AI-powered platform that automates technology intelligence, providing real-time forecasting and comprehensive insights to accelerate strategic decision-making for DRDO.
@@ -123,6 +162,7 @@ export default function LandingPage() {
               </Link>
             </motion.div>
           </motion.section>
+
           <motion.div className="text-center mt-25 mb-20" initial={{ opacity: 0, y: -4 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.6 }} transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}>
             <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}>
               <ScrollDownIndicator />
@@ -140,63 +180,34 @@ export default function LandingPage() {
             </div>
 
             <div className="max-w-6xl mx-auto mb-16">
-              <InteractiveDemo src="/demo-dashboard.png" hovered={hovered} />
+              <InteractiveDemo src="/demo-dashboard.png" hovered={hovered} setHovered={setHovered} mousePosition={mousePosition} setMousePosition={setMousePosition} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              <motion.div
-                onMouseEnter={() => setHovered("convergence")}
-                onFocus={() => setHovered("convergence")}
-                onMouseLeave={() => setHovered(null)}
-                onBlur={() => setHovered(null)}
-                variants={cardVariant}
-                whileHover={{ y: -4, scale: 1.01 }}
-                whileTap={{ scale: 0.995 }}
-                className="flex flex-col items-start relative bg-neutral-900/50 border border-neutral-800 rounded-xl p-6"
-              >
-                <FloatingCorners />
-                <FiDatabase className="h-8 w-8 text-sky-500 mb-4" />
-                <h4 className="text-xl font-semibold mb-2">Technology Convergence</h4>
-                <p className="text-neutral-400 leading-relaxed">
-                  Maps relationships across patents, publications, and suppliers to detect convergence zones and predict integrated tech pathways.
-                </p>
-              </motion.div>
-
-              <motion.div
-                onMouseEnter={() => setHovered("trl")}
-                onFocus={() => setHovered("trl")}
-                onMouseLeave={() => setHovered(null)}
-                onBlur={() => setHovered(null)}
-                variants={cardVariant}
-                whileHover={{ y: -4, scale: 1.01 }}
-                whileTap={{ scale: 0.995 }}
-                className="flex flex-col items-start relative bg-neutral-900/50 border border-neutral-800 rounded-xl p-6"
-              >
-                <FloatingCorners />
-                <FiCpu className="h-8 w-8 text-sky-500 mb-4" />
-                <h4 className="text-xl font-semibold mb-2">TRL Progression</h4>
-                <p className="text-neutral-400 leading-relaxed">
-                  Automated TRL estimation and trajectory forecasting to help labs prioritize development and reduce time-to-adoption.
-                </p>
-              </motion.div>
-
-              <motion.div
-                onMouseEnter={() => setHovered("adoption")}
-                onFocus={() => setHovered("adoption")}
-                onMouseLeave={() => setHovered(null)}
-                onBlur={() => setHovered(null)}
-                variants={cardVariant}
-                whileHover={{ y: -4, scale: 1.01 }}
-                whileTap={{ scale: 0.995 }}
-                className="flex flex-col items-start relative bg-neutral-900/50 border border-neutral-800 rounded-xl p-6"
-              >
-                <FloatingCorners />
-                <FiTrendingUp className="h-8 w-8 text-sky-500 mb-4" />
-                <h4 className="text-xl font-semibold mb-2">Adoption Rate</h4>
-                <p className="text-neutral-400 leading-relaxed">
-                  Real-time S-curve analytics and signal detection to identify inflection points for smarter, data-backed planning.
-                </p>
-              </motion.div>
+              <FeatureCard
+                icon={FiDatabase}
+                title="Technology Convergence"
+                body="Maps relationships across patents, publications, and suppliers to detect convergence zones and predict integrated tech pathways."
+                hoveredKey={hovered}
+                id="convergence"
+                onHover={setHovered}
+              />
+              <FeatureCard
+                icon={FiCpu}
+                title="TRL Progression"
+                body="Automated TRL estimation and trajectory forecasting to help labs prioritize development and reduce time-to-adoption."
+                hoveredKey={hovered}
+                id="trl"
+                onHover={setHovered}
+              />
+              <FeatureCard
+                icon={FiTrendingUp}
+                title="Adoption Rate"
+                body="Real-time S-curve analytics and signal detection to identify inflection points for smarter, data-backed planning."
+                hoveredKey={hovered}
+                id="adoption"
+                onHover={setHovered}
+              />
             </div>
           </motion.section>
 
@@ -242,6 +253,24 @@ export default function LandingPage() {
                 <p className="text-neutral-400">
                   Track technology progression with S-curves, detect market convergence, and receive continuous updates on emerging tech signals.
                 </p>
+              </motion.div>
+            </motion.div>
+          </motion.section>
+
+          <FAQs />
+
+          <motion.section className="py-24 text-center" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
+            <motion.div className="bg-gradient-to-r from-sky-900/20 to-neutral-900/20 p-12" variants={fadeInUp}>
+              <motion.h3 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4" variants={fadeInUp}>
+                Ready to Transform Your Technology Intelligence?
+              </motion.h3>
+              <motion.p className="text-md text-neutral-400 max-w-2xl mx-auto mb-8" variants={fadeInUp}>
+                Join DRDO in leveraging AI-powered insights for strategic decision-making. Start your journey with AETOS today and stay ahead of technological trends.
+              </motion.p>
+              <motion.div variants={fadeInUp}>
+                <Link to="/dashboard" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-medium ring-offset-neutral-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-sky-600 text-neutral-50 hover:bg-sky-500 h-12 px-10">
+                  Get Started Now
+                </Link>
               </motion.div>
             </motion.div>
           </motion.section>
