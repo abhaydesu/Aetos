@@ -1,24 +1,47 @@
 import React from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import Navbar from "../components/navbar";
+import Navbar from "../components/navbar.jsx";
 import Footer from "../components/footer";
 
 const CheckIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-sky-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-sky-500 mr-3 flex-shrink-0 mt-0.5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
   </svg>
 );
 
 const XIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-neutral-600 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-neutral-600 mr-3 flex-shrink-0 mt-0.5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M6 18L18 6M6 6l12 12"
+    />
   </svg>
 );
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 const stagger = {
   hidden: {},
@@ -33,7 +56,7 @@ const allFeatures = [
   "AI-powered TRL assessment",
   "S-curve forecasting",
   "Multi-lab coordination",
-  "API access & integrations"
+  "API access & integrations",
 ];
 
 const plans = [
@@ -43,15 +66,15 @@ const plans = [
     description: "Basic access for research evaluation",
     features: [
       "Technology queries (monthly quota)",
-      "Research publication access"
+      "Research publication access",
     ],
     cta: "Get Started",
     link: "/dashboard",
-    popular: false
+    popular: false,
   },
   {
     name: "Professional",
-    price: "₹99,999",
+    price: "₹9,999",
     period: "/year",
     description: "Full platform access for DRDO labs",
     features: [
@@ -60,11 +83,11 @@ const plans = [
       "Research publication access",
       "Automated data aggregation",
       "AI-powered TRL assessment",
-      "S-curve forecasting"
+      "S-curve forecasting",
     ],
     cta: "Start Trial",
     popular: true,
-    link: "/dashboard"
+    link: "/dashboard",
   },
   {
     name: "Enterprise",
@@ -78,12 +101,12 @@ const plans = [
       "AI-powered TRL assessment",
       "S-curve forecasting",
       "Multi-lab coordination",
-      "API access & integrations"
+      "API access & integrations",
     ],
     cta: "Contact Sales",
     popular: false,
-    link: "/dashboard"
-  }
+    link: "/contact",
+  },
 ];
 
 function PlansAndPricing() {
@@ -91,7 +114,7 @@ function PlansAndPricing() {
     <div className="min-h-screen bg-neutral-950 text-neutral-100 inter">
       <Navbar />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-32">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-32">
         <motion.div
           className="text-center mb-20"
           initial="hidden"
@@ -108,7 +131,8 @@ function PlansAndPricing() {
             variants={fadeInUp}
             className="text-lg text-neutral-400 max-w-2xl mx-auto"
           >
-            Choose the plan that fits your laboratory's needs and scale as you grow.
+            Choose the plan that fits your laboratory's needs and scale as you
+            grow.
           </motion.p>
         </motion.div>
 
@@ -124,7 +148,9 @@ function PlansAndPricing() {
               variants={fadeInUp}
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
               className={`relative flex flex-col bg-neutral-900/50 border rounded-xl p-8 shadow-lg ${
-                plan.popular ? "border-sky-500 shadow-sky-500/10" : "border-neutral-800"
+                plan.popular
+                  ? "border-sky-500 shadow-sky-500/10"
+                  : "border-neutral-800"
               }`}
             >
               {plan.popular && (
@@ -137,11 +163,17 @@ function PlansAndPricing() {
 
               <div className="mb-8">
                 <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
-                <p className="text-neutral-400 text-sm mb-4 h-10">{plan.description}</p>
+                <p className="text-neutral-400 text-sm mb-4 h-10">
+                  {plan.description}
+                </p>
                 <div className="flex items-baseline">
-                  <span className="text-4xl font-extrabold tracking-tight">{plan.price}</span>
+                  <span className="text-4xl font-extrabold tracking-tight">
+                    {plan.price}
+                  </span>
                   {plan.period && (
-                    <span className="text-neutral-400 ml-2 text-sm">{plan.period}</span>
+                    <span className="text-neutral-400 ml-2 text-sm">
+                      {plan.period}
+                    </span>
                   )}
                 </div>
               </div>
@@ -152,7 +184,11 @@ function PlansAndPricing() {
                   return (
                     <li key={feature} className="flex items-start">
                       {included ? <CheckIcon /> : <XIcon />}
-                      <span className={`text-sm ${included ? "text-neutral-300" : "text-neutral-600"}`}>
+                      <span
+                        className={`text-sm ${
+                          included ? "text-neutral-300" : "text-neutral-600"
+                        }`}
+                      >
                         {feature}
                       </span>
                     </li>

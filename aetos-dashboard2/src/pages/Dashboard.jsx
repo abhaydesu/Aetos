@@ -10,7 +10,7 @@ import DocumentTable from "../components/DocumentTable";
 import AnalyticsDashboard from "../components/AnalyticsDashboard";
 import { fetchDocumentsByTopic, startAnalysisForTopic } from "../services/api";
 import Footer from "../components/footer";
-import Navbar from "../components/navbar";
+import Navbar from "../components/navbar.jsx";
 
 function Dashboard() {
   const [documents, setDocuments] = useState([]);
@@ -56,9 +56,9 @@ function Dashboard() {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -68,9 +68,9 @@ function Dashboard() {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const cardVariants = {
@@ -81,17 +81,17 @@ function Dashboard() {
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: [0.22, 1, 0.36, 1]
-      }
+        ease: [0.22, 1, 0.36, 1],
+      },
     },
     exit: {
       opacity: 0,
       y: -20,
       scale: 0.95,
       transition: {
-        duration: 0.3
-      }
-    }
+        duration: 0.3,
+      },
+    },
   };
 
   return (
@@ -112,7 +112,7 @@ function Dashboard() {
         <Navbar />
 
         {/* Main content area */}
-        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 py-10">
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -148,6 +148,35 @@ function Dashboard() {
           {/* Results Section */}
           <div className="mt-8 space-y-8 pb-24">
             <AnimatePresence mode="wait">
+              {/* Analytics Dashboard Container */}
+              {analyzedTopic && (
+                <motion.div
+                  key="analytics"
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6 md:p-8 backdrop-blur-sm"
+                >
+                  <motion.h2
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-2xl font-semibold mb-4 text-neutral-200"
+                  >
+                    Strategic Analysis for "{analyzedTopic}"
+                  </motion.h2>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <AnalyticsDashboard topic={analyzedTopic} />
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <AnimatePresence mode="wait">
               {/* Document Table Container */}
               {documents.length > 0 && (
                 <motion.div
@@ -177,35 +206,7 @@ function Dashboard() {
               )}
             </AnimatePresence>
 
-            <AnimatePresence mode="wait">
-              {/* Analytics Dashboard Container */}
-              {analyzedTopic && (
-                <motion.div
-                  key="analytics"
-                  variants={cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6 md:p-8 backdrop-blur-sm"
-                >
-                  <motion.h2
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="text-2xl font-semibold mb-4 text-neutral-200"
-                  >
-                    Strategic Analysis for "{analyzedTopic}"
-                  </motion.h2>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <AnalyticsDashboard topic={analyzedTopic} />
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            
           </div>
         </main>
         <Footer />

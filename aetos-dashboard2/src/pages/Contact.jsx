@@ -1,45 +1,60 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
+import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
+import Footer from '../components/footer';
+import Navbar from '../components/navbar';
+import FloatingCorners from '../components/ui/floating-corners';
+import { MagicButton } from '../components/ui/MagicButton';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+      staggerChildren: 0.1, // Add this line to animate children with a 0.1s delay between them
+    },
+  },
 };
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);
-    setFormData({ name: "", email: "", message: "" });
+    setFormData({ name: '', email: '', message: '' });
   };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 inter relative overflow-x-hidden">
       <motion.div
-        className="pointer-events-none absolute inset-0 w-full bg-grid-neutral-800/40"
+        className="pointer-events-none absolute inset-0 w-full "
         style={{
-          maskImage: "radial-gradient(ellipse at top, black 20%, transparent 70%)",
-          WebkitMaskImage: "radial-gradient(ellipse at top, black 20%, transparent 70%)",
+          maskImage:
+            "radial-gradient(ellipse at top, black 20%, transparent 70%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse at top, black 20%, transparent 70%)",
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
       />
 
-      <div className="relative z-10">
-        <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-          <Navbar />
-        </motion.div>
-
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-32">
+    <Navbar /> 
+     <div className="relative z-10">
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-32">
           <motion.h2
             className="text-center text-4xl md:text-6xl font-extrabold tracking-tight mb-6"
             initial="hidden"
@@ -55,61 +70,72 @@ export default function Contact() {
             animate="visible"
             variants={fadeInUp}
           >
-            Have a question, partnership inquiry, or feedback?  
-            We’d love to hear from you. Fill out the form below and we’ll get back to you soon.
+            Have a question, partnership inquiry, or feedback? We’d love to hear
+            from you. Fill out the form below and we’ll get back to you soon.
           </motion.p>
 
           <motion.form
             onSubmit={handleSubmit}
             initial="hidden"
             animate="visible"
-            variants={fadeInUp}
-            className="bg-neutral-900/60 border border-neutral-800 rounded-2xl shadow-xl p-8 backdrop-blur-sm"
+            variants={fadeInUp} 
+            className="relative bg-neutral-950 bg-grid-neutral-900/40 border border-neutral-800 shadow-xl p-8" 
           >
+            <FloatingCorners />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-neutral-300 mb-2">Name</label>
+                <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  Name
+                </label>
                 <input
                   type="text"
                   name="name"
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-md bg-neutral-950 border border-neutral-800 text-neutral-100 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 outline-none transition"
+                  placeholder="Anon Sharma"
+                  className="w-full px-4 py-3 rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 focus:border-sky-800 outline-none transition"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-neutral-300 mb-2">Email</label>
+                <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
                   name="email"
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-md bg-neutral-950 border border-neutral-800 text-neutral-100 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 outline-none transition"
+                  placeholder="anon@works.com"
+                  className="w-full px-4 py-3 rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 focus:border-sky-800 outline-none transition"
                 />
               </div>
             </div>
 
             <div className="mt-6">
-              <label className="block text-sm font-medium text-neutral-300 mb-2">Message</label>
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
+                Message
+              </label>
               <textarea
                 name="message"
                 rows="5"
                 required
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-md bg-neutral-950 border border-neutral-800 text-neutral-100 focus:border-sky-600 focus:ring-1 focus:ring-sky-600 outline-none transition resize-none"
+                placeholder="Send us a message..."
+                className="w-full px-4 py-3 rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-100 focus:border-sky-800  outline-none transition resize-none"
               />
             </div>
 
             <div className="mt-8 text-center">
               <button
                 type="submit"
-                className="px-8 py-3 rounded-md bg-sky-600 text-neutral-50 text-sm font-medium hover:bg-sky-500 focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition"
               >
+                <MagicButton>
                 {submitted ? "Message Sent!" : "Send Message"}
+                </MagicButton>
               </button>
             </div>
           </motion.form>

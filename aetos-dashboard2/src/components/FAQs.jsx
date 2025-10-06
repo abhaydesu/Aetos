@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { FiPlus, FiMinus } from "react-icons/fi";
+import { FiPlus, FiMinus, FiChevronDown, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+//eslint-disable-next-line
+import { motion, AnimatePresence } from "framer-motion";
 
 const faqsData = [
   {
@@ -36,46 +38,95 @@ function FAQs() {
     setOpenFAQ(openFAQ === id ? null : id);
   };
 
-  return (
-    <section id="faqs" className="py-24">
-      <div className="text-center mb-16">
-        <h3 className="text-3xl font-bold tracking-tight">
-          Frequently Asked Questions
-        </h3>
-        <p className="mt-3 max-w-2xl mx-auto text-neutral-400">
-          Get answers to common questions about AETOS and how it transforms technology intelligence.
-        </p>
-      </div>
+  // Animation variants for the container and items
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
-      <div className="max-w-3xl mx-auto space-y-4">
-        {faqsData.map((faq) => (
-          <div
-            key={faq.id}
-            className="bg-neutral-900/50 border border-neutral-800 rounded-lg overflow-hidden"
-          >
-            <button
-              onClick={() => toggleFAQ(faq.id)}
-              className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-neutral-800/30 transition-colors "
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+      },
+    },
+  };
+
+  return (
+    <section id="faqs" className="py-24 ">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h3 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+            Frequently Asked Questions
+          </h3>
+          <p className="mt-4 max-w-2xl mx-auto text-neutral-400">
+            Get answers to common questions about AETOS and how it transforms technology intelligence.
+          </p>
+        </div>
+
+        <motion.div
+          className="max-w-3xl mx-auto space-y-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {faqsData.map((faq) => (
+            <motion.div
+              key={faq.id}
+              variants={itemVariants}
+              className="bg-neutral-900 border border-neutral-800 rounded-lg overflow-hidden " 
             >
-              <span className="text-sm font-semibold text-neutral-300">
-                {faq.question}
-              </span>
-              <div className="transition-transform duration-200" style={{ transform: openFAQ === faq.id ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                {openFAQ === faq.id ? (
-                  <FiMinus className="h-5 w-5 text-sky-400" />
-                ) : (
-                  <FiPlus className="h-5 w-5 text-sky-400" />
+              <button
+                onClick={() => toggleFAQ(faq.id)}
+                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-neutral-800/50  transition-colors duration-200"
+              >
+                <span className="text-md font-medium text-neutral-200">
+                  {faq.question}
+                </span>
+                <motion.div
+                  animate={{ rotate: openFAQ === faq.id ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {openFAQ === faq.id ? (
+                    <FiChevronRight className="h-5 w-5 text-sky-400" />
+                  ) : (
+                    <FiChevronDown className="h-5 w-5 text-sky-400" />
+                  )}
+                </motion.div>
+              </button>
+              
+              <AnimatePresence initial={false}>
+                {openFAQ === faq.id && (
+                  <motion.div
+                    key="content"
+                    initial="collapsed"
+                    animate="open"
+                    exit="collapsed"
+                    variants={{
+                      open: { opacity: 1, height: "auto" },
+                      collapsed: { opacity: 0, height: 0 },
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-4 pt-2 text-neutral-400 text-sm leading-relaxed ">
+                      {faq.answer}
+                    </div>
+                  </motion.div>
                 )}
-              </div>
-            </button>
-            
-            {openFAQ === faq.id && (
-              <div className="px-6 pb-4 text-blue-200 text-sm leading-relaxed transition-all duration-300">
-                {faq.answer}
-              </div>
-            )}
-          </div>
-        ))}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
