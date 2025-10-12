@@ -1,143 +1,90 @@
-# AETOS Project
+# AETOS — Automated Comprehensive Technology Intelligence & Forecasting Platform
 
-An AI-powered platform for automated technology intelligence and forecasting.
+> **AETOS** (Automated Comprehensive Technology Intelligence and Forecasting Platform) is an AI-powered system that transforms scattered technology data into real-time, actionable insights for strategic decision-making.
 
-## Prerequisites
+Team Hexadecimals | SIH 25245
+---
 
-- Python (3.9 or newer)
-- Node.js and npm
-- Homebrew (for macOS users)
-- Git
+## 🚀 Overview
+
+Across research organizations like **DRDO**, technology forecasting often relies on **manual, fragmented methods** — from patent searches and publication scans to supplier mapping and TRL assessments.  
+These approaches are **time-consuming, siloed, and outdated** before they reach stakeholders.
+
+**AETOS** fixes that by providing an **intelligent, unified dashboard** that continuously aggregates, analyzes, and visualizes technology intelligence in real-time.
 
 ---
 
-## 1. Initial Setup
+## 🧠 Core Features
 
-First, clone the repository to your local machine.
-
-```bash
-git clone <your-repository-url>
-cd Aetos
-```
-
----
-
-## 2. Configuration
-
-The application requires API keys and database connection strings. Create a `.env` file in the root of the Aetos project folder:
-
-```bash
-touch .env
-```
-
-Open this new `.env` file and add the following, replacing the placeholder values with your own keys:
-
-```env
-# .env file
-
-# Get this from Google AI Studio. It's required for all AI analysis.
-GEMINI_API_KEY="your_google_ai_api_key_here"
-
-# This is the default connection string for a local MongoDB instance.
-MONGO_URI="mongodb://localhost:27017/"
-```
+### 1. **Technology Convergence Detection**
+Identify where disciplines intersect before the world notices.  
+- Maps relationships across patents, publications, and companies.  
+- Detects emerging intersections (e.g., *AI + Drones*, *Materials + Energy Storage*).  
+- Interactive graphs visualize research clustering and co-evolution across domains.  
 
 ---
 
-## 3. Install Dependencies
-
-You need to install dependencies for both the Python backend and the React frontend.
-
-### Backend (Python)
-
-Create a virtual environment and install the required packages.
-
-```bash
-# From the root Aetos directory
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-### Frontend (React)
-
-Navigate to the dashboard directory and install the Node packages.
-
-```bash
-# From the root Aetos directory
-cd aetos-dashboard
-npm install
-```
+### 2. **TRL Progression & Forecasting**
+Track how technologies mature over time.  
+- AI-driven **Technology Readiness Level (TRL)** estimation from publications and patents.  
+- Real-time S-curve and Hype curve forecasting.  
+- Historical and predictive analytics to guide R&D investment timing.  
 
 ---
 
-## 4. Database Setup (for macOS users)
-
-The backend relies on Redis and MongoDB. Use Homebrew to install and run them as background services.
-
-### Redis (Task Queue)
-
-```bash
-brew install redis
-brew services start redis
-```
-
-### MongoDB (Primary Database)
-
-```bash
-brew tap mongodb/brew
-brew install mongodb-community
-brew services start mongodb-community
-```
-
-> **Note:** For other operating systems, using Docker to run Redis and MongoDB is recommended.
+### 3. **Adoption Rate Analytics**
+Understand how innovation spreads in the real world.  
+- Aggregates **market, funding, and industry signals** to estimate adoption velocity.  
+- Highlights **public vs private R&D investments** by sector.  
+- Dynamic dashboards showing market size evolution and convergence trends.  
 
 ---
 
-## 5. Running the Application
+## 🔗 Data Integration
 
-AETOS requires three separate processes to be running simultaneously in three different terminals.
+AETOS connects and harmonizes multiple data sources:  
+- **Google Patents API** — Patent filings and inventor trends.  
+- **arXiv API** — Research papers, abstracts, and citations.  
+- **Industry Reports (custom feeds)** — Market size, company engagement, and funding data.  
+- **Simulated modules** for demo visualization (for non-public data).  
 
-### Terminal 1: Start the Celery Worker
+---
 
-This process handles all background analysis.
+## 🧩 System Components
 
-```bash
-# Navigate to the root Aetos directory
-cd /path/to/Aetos
+| Module | Description |
+|--------|-------------|
+| **Data Aggregator** | Fetches and normalizes inputs from APIs and databases. |
+| **AI Analysis Engine** | Performs TRL estimation, clustering, and forecasting using LLMs + ML models. |
+| **Visualization Layer** | React-based dynamic dashboard with real-time graphs and filters. |
+| **Command Trigger Interface** | Voice and text-based query input (e.g., say *“Drone”* to fetch TRL insights). |
 
-# Activate the virtual environment
-source venv/bin/activate
+---
 
-# Start the worker
-celery -A worker.celery_app worker --loglevel=info
-```
+## 🎮 Live Demo (Example Flow)
 
-### Terminal 2: Start the API Server
+1. Launch AETOS dashboard.  
+2. Say or type a keyword (e.g., **Drone**).  
+3. Within seconds, AETOS retrieves related research papers and patents.  
+4. Each paper is tagged with **inferred TRL levels** and direct links to **arXiv**.  
+5. Explore convergence graphs and adoption metrics to understand the full ecosystem.  
 
-This process serves the data to the frontend.
+---
 
-```bash
-# Navigate to the root Aetos directory in a NEW terminal
-cd /path/to/Aetos
+## 🧭 Vision
 
-# Activate the virtual environment
-source venv/bin/activate
+AETOS aims to become a **comprehensive technology foresight platform** — enabling organizations to:  
+- Anticipate emerging technologies.  
+- Quantify innovation readiness.  
+- Bridge data silos with automated intelligence.  
 
-# Start the API
-python api.py
-```
+---
 
-### Terminal 3: Start the React App
+## 🛠️ Tech Stack
 
-This process runs the user interface.
-
-```bash
-# Navigate to the dashboard directory in a NEW terminal
-cd /path/to/Aetos/aetos-dashboard
-
-# Start the app (DO NOT activate the Python venv here)
-npm start
-```
-
-Once all three are running, the AETOS dashboard will automatically open in your browser at [http://localhost:3000](http://localhost:3000).
+- **Frontend:** React.js, TailwindCSS, Chart.js / D3.js  
+- **Backend:** Python (FastAPI / Flask)  
+- **AI & Data:** Scikit-learn, Transformers, OpenAI / Llama APIs  
+- **Data Sources:** Google Patents, arXiv, Custom Reports  
+- **Database:** PostgreSQL / MongoDB  
+- **Hosting:** Dockerized deployment (optional Redis for caching)

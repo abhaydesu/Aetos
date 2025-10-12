@@ -1,8 +1,6 @@
-# ingest.py
 import requests
 import pandas as pd
 from xml.etree import ElementTree as ET
-import time
 
 def fetch_arxiv_data(topic: str, max_results: int = 10) -> pd.DataFrame:
     base_url = "http://export.arxiv.org/api/query"
@@ -13,15 +11,11 @@ def fetch_arxiv_data(topic: str, max_results: int = 10) -> pd.DataFrame:
         "sortBy": "submittedDate",
         "sortOrder": "descending"
     }
-    
     try:
-        print(f"Fetching up to {max_results} arXiv papers for '{topic}'...")
-        response = requests.get(base_url, params=params, timeout=30)
+        response = requests.get(base_url, params=params, timeout=15)
         response.raise_for_status()
-        
         root = ET.fromstring(response.content)
         ns = {'atom': 'http://www.w3.org/2005/Atom'}
-        
         all_papers = []
         for entry in root.findall('atom:entry', ns):
             paper_data = {
@@ -31,24 +25,20 @@ def fetch_arxiv_data(topic: str, max_results: int = 10) -> pd.DataFrame:
                 'published': entry.find('atom:published', ns).text[:10],
                 'authors': [a.find('atom:name', ns).text for a in entry.findall('atom:author', ns)],
                 'source': 'arxiv',
-                'provider_company': 'N/A'  # --- ADDED for data consistency
+                'provider_company': 'N/A',
+                'funding_details': ''
             }
-            if all(paper_data.values()): # Basic check for missing fields
-                all_papers.append(paper_data)
-        
-        # --- CRITICAL RELEVANCE VALIDATION STEP ---
-        print(f"--- Relevance Check ---")
-        relevant_papers = []
-        topic_keywords = set(topic.lower().split())
-        for paper in all_papers:
-            content = (paper['title'] + ' ' + paper['summary']).lower()
-            if any(keyword in content for keyword in topic_keywords):
-                relevant_papers.append(paper)
-        
-        print(f"--- Found {len(all_papers)} total papers, {len(relevant_papers)} are relevant. ---")
-        time.sleep(3)
-        return pd.DataFrame(relevant_papers)
-        
-    except Exception as e:
-        print(f"An error occurred in fetch_arxiv_data: {e}")
+            all_papers.append(paper_data)
+        if not all_papers:
+            return pd.DataFrame()
+        relevant = []
+        kw = set(topic.lower().split())
+        for p in all_papers:
+            content = (p['title'] + ' ' + p['summary']).lower()
+            if any(k in content for k in kw):
+                relevant.append(p)
+        if not relevant:
+            relevant = all_papers[:max_results]
+        return pd.DataFrame(relevant[:max_results])
+    except Exception:
         return pd.DataFrame()
