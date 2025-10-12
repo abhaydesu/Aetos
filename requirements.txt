@@ -11,3 +11,4 @@ celery[redis]
 google-generativeai
 redis
 selenium
+rich
