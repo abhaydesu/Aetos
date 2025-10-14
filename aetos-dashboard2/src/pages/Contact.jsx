@@ -130,13 +130,9 @@ export default function Contact() {
             </div>
 
             <div className="mt-8 text-center">
-              <button
-                type="submit"
-              >
-                <MagicButton>
+                <MagicButton type="submit">
                 {submitted ? "Message Sent!" : "Send Message"}
                 </MagicButton>
-              </button>
             </div>
           </motion.form>
         </main>
