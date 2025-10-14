@@ -30,15 +30,7 @@ export default function LandingPage() {
 
       <main className="relative z-10 max-w-7xl mt-40 mx-auto px-4 sm:px-6 lg:px-8">
         <Hero />
-        <motion.div
-          className="text-center mt-25 mb-20"
-          initial={{ opacity: 0, y: -4 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-        >
-          <ScrollDownIndicator />
-        </motion.div>
+        
 
         <KeyCapabilities />
         <Features />

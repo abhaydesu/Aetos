@@ -96,13 +96,13 @@ export default function KeyCapabilities() {
   return (
     <motion.section
       id="features"
-      className="py-5"
+      className="py-12 "
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
     >
-      <div className="text-center mb-12">
-        <motion.h3 className="text-4xl  font-bold tracking-tight" variants={fadeInUp}>
+      <div className="text-center mb-12 ">
+        <motion.h3 className="text-4xl mt-10 font-bold tracking-tight" variants={fadeInUp}>
           Key Capabilities
         </motion.h3>
         <motion.p className="mt-3 max-w-xl  mx-auto text-neutral-400" variants={fadeInUp}>
@@ -110,11 +110,12 @@ export default function KeyCapabilities() {
         </motion.p>
       </div>
 
-      <div className="max-w-6xlmx-auto mb-16">
+      <div className='grid grid-cols-4 pt-10'>
+      <div className="max-w-6xl col-span-3 mx-auto mb-16">
         <InteractiveDemo />
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <div>
+      <div className="grid grid-cols-1 gap-8 max-w-6xl mx-auto">
         <FeatureCard
           icon={FiDatabase}
           title="Technology Convergence"
@@ -133,6 +134,8 @@ export default function KeyCapabilities() {
           body="Uses real-time analytics to identify key growth points for better planning."
           id="adoption"
         />
+      </div>
+      </div>
       </div>
     </motion.section>
   );

@@ -1,38 +1,42 @@
-import React from 'react';
-
+import React from "react";
 //eslint-disable-next-line
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
+/**
+ * A beautiful, animated button with a shiny hover effect.
+ *
+ * @param {object} props - The component props.
+ * @param {React.ReactNode} props.children - The content to display inside the button.
+ * @param {string} [props.className] - Additional classes to apply to the button.
+ * @returns {JSX.Element} The MagicButton component.
+ */
 export const MagicButton = ({ children, className, ...props }) => {
   return (
     <motion.button
-      className={`relative inline-flex h-11 px-8 mt-8
-                  items-center justify-center whitespace-nowrap
-                  rounded-md text-sm font-medium text-neutral-50
-                  ring-offset-neutral-900 transition-colors
-                  focus-visible:outline-none focus-visible:ring-2
-                  focus-visible:ring-sky-500 focus-visible:ring-offset-2
-                  overflow-hidden group cursor-pointer
-                  ${className}`}
-      whileHover="hover"
-      whileTap="tap"
+      // Base styles for the button container
+      className={`relative inline-flex h-12 items-center justify-center
+                   overflow-hidden rounded-lg bg-gradient-to-br from-sky-900 via-sky-700 to-sky-900
+                   px-8 mt-8 font-medium text-neutral-50 group
+                           shadow-[inset_0_1px_2px_rgba(125,211,252,0.5),_0_0px_0px_rgba(3,105,161,0.6)]
+hover:shadow-[inset_0_1px_2px_rgba(125,211,252,0.7),_0_1px_2px_rgba(3,105,161,0.8)]
+cursor-pointer
+                   ${className}`}
+      // Animation for the tap/click interaction
+      whileTap={{ scale: 0.97 }}
       {...props}
     >
-      <span className="absolute inset-0 z-0 rounded-md bg-sky-600 transition-colors"></span>
+      <span className="absolute inset-0 h-full w-full rounded-lg" />
 
-      <motion.span
-        className="absolute inset-0 z-[1] rounded-md bg-gradient-to-br from-sky-400 via-indigo-500 to-purple-500"
-        variants={{
-          hover: { opacity: 1, scale: 1.2 },
-          tap: { scale: 0.95 }
-        }}
-        initial={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+      {/* The shiny gleam effect */}
+      <span
+        className="absolute bottom-0 left-0 top-0 z-10 h-full w-1/4
+                   bg-gradient-to-r from-transparent via-white/20 to-transparent
+                   transform -translate-x-full transition-transform duration-700
+                   ease-in-out group-hover:translate-x-[400%]"
       />
-      
-      <span className="relative z-10">
-        {children}
-      </span>
+
+      {/* The actual button content (text, icons, etc.) */}
+      <span className="relative z-20">{children}</span>
     </motion.button>
   );
 };
