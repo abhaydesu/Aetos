@@ -58,9 +58,16 @@ export const Hero = () => {
           </motion.p>
 
           <motion.div className="mt-8" variants={fadeInUp}>
+            <Link to="/dashboard">
             <MagicButton>
-              <Link to="/dashboard">Get Started</Link>
+              Get Started
             </MagicButton>
+            </Link>
+            
+              <a 
+                target="_blank"
+                href="https://youtu.be/lJUfEGNZ69A"
+              >
             <button
               className="mx-5 relative inline-flex h-11 px-8 mt-8
               items-center justify-center whitespace-nowrap
@@ -69,13 +76,10 @@ export const Hero = () => {
               focus-visible:outline-none
               overflow-hidden group cursor-pointer bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 "
             >
-              <a 
-                target="_blank"
-                href="https://youtu.be/lJUfEGNZ69A"
-              >
               Watch Demo
-              </a>
+
             </button>
+                          </a>
           </motion.div>
 
           <motion.div
