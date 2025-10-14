@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { MagicButton } from './ui/MagicButton.jsx';
 import DecryptedText from './ui/DecryptedText.jsx';
 import Animatedheading from './ui/AnimationHeading.jsx';
+import { Link } from 'react-router-dom';
 
 export const Hero = () => {
   return (
@@ -44,14 +45,20 @@ export const Hero = () => {
         insights to accelerate strategic decision-making for DRDO.
       </motion.p>
       <motion.div className="mt-8" variants={fadeInUp}>
-        <MagicButton>Get Started</MagicButton>
+        <MagicButton>
+          <Link to="/dashboard">
+          Get Started
+          </Link>
+        </MagicButton>
         <button className="mx-5 relative inline-flex h-11 px-8 mt-8
             items-center justify-center whitespace-nowrap
             rounded-md text-sm font-medium text-neutral-50
             ring-offset-neutral-900 transition-colors
             focus-visible:outline-none
             overflow-hidden group cursor-pointer bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 ">
+        <Link to='https://youtu.be/lJUfEGNZ69A' target='_blank'>
           Watch Demo
+        </Link>
         </button>
       </motion.div>
     </motion.section>
