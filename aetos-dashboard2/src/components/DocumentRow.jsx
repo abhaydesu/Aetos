@@ -1,19 +1,45 @@
-// src/components/DocumentRow.jsx
 import React from "react";
 import { getTRLClasses } from "../utils/colorUtils";
-import { FiExternalLink } from "react-icons/fi"; // For a nice external link icon
+import { FiExternalLink } from "react-icons/fi"; 
+
+// --- MOCK DATA FOR DEMO ---
+const mockCountries = [
+  "USA", "Germany", "China", "UK", "Japan", "South Korea", "Canada", "Switzerland", "France", "Israel"
+];
+
+const mockFunding = [
+  "DARPA Grant", "National Science Foundation (NSF)", "EU Horizon 2027", "Internal R&D Funding",
+  "Ministry of Defence Grant", "University Research Fund", "$750,000 from AFRL", "Undisclosed",
+  "Corporate Sponsorship (Boeing)", "DFG Grant (Germany)"
+];
+// --- END MOCK DATA ---
+
 
 function DocumentRow({ doc }) {
   const publishedDate = doc.published?.$date
     ? new Date(doc.published.$date).toLocaleDateString()
     : doc.published || "N/A";
 
+  // --- DETERMINISTIC RANDOMIZATION LOGIC ---
+  const getDeterministicIndex = (id, arrayLength) => {
+    if (!id) return 0;
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+      hash = (hash << 5) - hash + id.charCodeAt(i);
+      hash |= 0; // Convert to 32bit integer
+    }
+    return Math.abs(hash) % arrayLength;
+  };
+
+  // --- MODIFIED: ALWAYS use mock data for the demo ---
+  const country = mockCountries[getDeterministicIndex(doc.id, mockCountries.length)];
+  const funding = mockFunding[getDeterministicIndex(doc.id, mockFunding.length)];
+  // --- END MODIFICATION ---
+
   return (
-    // Each row is now a self-contained card with a subtle hover effect.
     <div className="bg-neutral-900/70 border border-neutral-800 rounded-lg p-5 transition-all duration-300 hover:border-sky-500/40 hover:bg-neutral-800/50">
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-x-6 gap-y-4">
         
-        {/* Column 1: Strategic Analysis (takes up more space) */}
         <div className="lg:col-span-3">
           <a
             href={doc.id}
@@ -77,10 +103,10 @@ function DocumentRow({ doc }) {
 
         {/* Footer with Metadata (spans full width of the card) */}
         <div className="lg:col-span-5 border-t border-neutral-800 pt-4 mt-2 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-neutral-400">
-          <p><strong className="font-medium text-neutral-300">Country:</strong> {doc.country || "N/A"}</p>
+          <p><strong className="font-medium text-neutral-300">Country:</strong> {country}</p>
           <p><strong className="font-medium text-neutral-300">Provider:</strong> {doc.provider_company || "N/A"}</p>
           <p><strong className="font-medium text-neutral-300">Date:</strong> {publishedDate}</p>
-          <p><strong className="font-medium text-neutral-300">Funding:</strong> {doc.funding_details || "N/A"}</p>
+          <p><strong className="font-medium text-neutral-300">Funding:</strong> {funding}</p>
         </div>
       </div>
     </div>
