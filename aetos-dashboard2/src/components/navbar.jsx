@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"; // Import Link
 //eslint-disable-next-line
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
@@ -18,15 +19,12 @@ const Navbar = () => {
       backgroundColor: "rgba(10, 10, 10, 0.1)",
     },
     docked: {
-      // 1. Resized the dock to be wider so it can fit the links
       maxWidth: "640px",
       padding: "0.75rem 1.5rem",
       marginTop: "0.75rem",
       backgroundColor: "rgba(10, 10, 10, 0.5)",
     },
   };
-
-  // 2. The navLinksVariants that hid the links has been completely removed.
 
   return (
     <header className="fixed top-0 w-full z-50 flex justify-center">
@@ -41,33 +39,39 @@ const Navbar = () => {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          {/* Logo */}
           <div>
-            <a href="/">
-              <img src="/logo.png" alt="AETOS Logo" className="h-6 transition-all duration-300 ease-out hover:scale-105 hover:drop-shadow-[0_0_1px_rgba(255,255,255,0.5)]" />
-            </a>
+            {/* Changed <a> to <Link> and href to to */}
+            <Link to="/">
+              <img
+                src="/logo.png"
+                alt="AETOS Logo"
+                className="h-6 transition-all duration-300 ease-out hover:scale-105 hover:drop-shadow-[0_0_1px_rgba(255,255,255,0.5)]"
+              />
+            </Link>
           </div>
 
-          {/* Nav Links Wrapper - Now a simple div, so links are always visible */}
           <div className="flex gap-8">
-                        <a
-              href="/dashboard"
+            {/* Changed <a> to <Link> and href to to */}
+            <Link
+              to="/dashboard"
               className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
             >
               Dashboard
-            </a>
-            <a
-              href="/pricing"
+            </Link>
+            {/* Changed <a> to <Link> and href to to */}
+            <Link
+              to="/pricing"
               className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
             >
               Plans
-            </a>
-            <a
-              href="/contact"
+            </Link>
+            {/* Changed <a> to <Link> and href to to */}
+            <Link
+              to="/contact"
               className="hidden sm:inline-block text-sm font-medium text-neutral-300 hover:text-white transition-colors"
             >
               Contact
-            </a>
+            </Link>
           </div>
         </motion.nav>
       </div>

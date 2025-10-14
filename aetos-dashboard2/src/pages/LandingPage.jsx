@@ -18,9 +18,9 @@ export default function LandingPage() {
         className="pointer-events-none absolute inset-0 w-full bg-grid-neutral-800/40"
         style={{
           maskImage:
-            "radial-gradient(ellipse at top, black 20%, transparent 70%)",
+            "radial-gradient(ellipse at top, black 10%, transparent 50%)",
           WebkitMaskImage:
-            "radial-gradient(ellipse at top, black 20%, transparent 70%)",
+            "radial-gradient(ellipse at top, black 10%, transparent 50%)",
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
