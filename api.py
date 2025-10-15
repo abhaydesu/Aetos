@@ -81,8 +81,21 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
                     # Remove markdown code blocks if present
                     text = text.strip()
                     if text.startswith('```'):
-                        text = '\n'.join(text.split('\n')[1:-1])
+                        lines = text.split('\n')
+                        text = '\n'.join(lines[1:-1]) if len(lines) > 2 else text
+                    
                     analysis = json.loads(text)
+                    
+                    # Clean NaN values in analysis
+                    def clean_dict(d):
+                        for k, v in list(d.items()):
+                            if isinstance(v, float) and (v != v):
+                                d[k] = None
+                            elif isinstance(v, dict):
+                                clean_dict(v)
+                        return d
+                    
+                    analysis = clean_dict(analysis)
                     return analysis
                 except json.JSONDecodeError:
                     # If not valid JSON, return raw text
@@ -102,11 +115,13 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
                 return
             
             records = df.to_dict('records')
-            # Convert datetime objects to strings
+            # Convert datetime objects to strings and handle NaN values
             for rec in records:
-                for k, v in rec.items():
+                for k, v in list(rec.items()):
                     if isinstance(v, pd.Timestamp):
                         rec[k] = v.isoformat()
+                    elif isinstance(v, (list, dict)):
+                        rec[k] = v  # Keep as is
                     elif pd.isna(v):
                         rec[k] = None
             
@@ -123,6 +138,8 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
                 db.documents.update_one(query, {"$set": rec}, upsert=True)
         except Exception as e:
             print(f"Error saving to DB: {e}")
+            import traceback
+            traceback.print_exc()
 
     # ========================================
     # TRL SCORING
@@ -314,7 +331,28 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
             results = []
             
             for d in db_docs:
-                doc = json.loads(json_util.dumps(d))
+                # Parse with json_util to handle BSON types, then convert back
+                doc_str = json_util.dumps(d)
+                doc = json.loads(doc_str)
+                
+                # Flatten any remaining BSON objects
+                def flatten_bson(obj):
+                    if isinstance(obj, dict):
+                        if '$numberDouble' in obj:
+                            return float(obj['$numberDouble'])
+                        if '$numberInt' in obj:
+                            return int(obj['$numberInt'])
+                        if '$date' in obj:
+                            return obj['$date']
+                        if '$oid' in obj:
+                            return obj['$oid']
+                        return {k: flatten_bson(v) for k, v in obj.items()}
+                    elif isinstance(obj, list):
+                        return [flatten_bson(item) for item in obj]
+                    return obj
+                
+                doc = flatten_bson(doc)
+                
                 results.append({
                     "title": doc.get("title", ""),
                     "summary": doc.get("summary", "") or doc.get("abstract", ""),
@@ -334,6 +372,8 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
             return results
         except Exception as e:
             print(f"DB fetch error: {e}")
+            import traceback
+            traceback.print_exc()
             return []
 
     def fetch_combined_papers(query, desired_num=10):
@@ -344,18 +384,19 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
         3. MongoDB (existing documents)
         
         Deduplicates by URL/title and returns up to desired_num results.
+        Sorts results: arXiv first, then Scholar, then DB.
         """
         results = []
         
-        # Run all fetchers concurrently
-        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as exe:
+        # Run all fetchers concurrently (disable DB for now)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as exe:
             future_arxiv = exe.submit(fetch_arxiv_papers, query, max_results=desired_num, timeout=ARXIV_TIMEOUT)
             future_scholar = exe.submit(fetch_scholar_via_serpapi, query, api_key=SERPAPI_KEY, max_results=desired_num, timeout=SERPAPI_TIMEOUT)
-            future_db = exe.submit(fetch_from_db, query, max_results=desired_num)
+            # future_db = exe.submit(fetch_from_db, query, max_results=desired_num)
             
             arxiv_res = []
             scholar_res = []
-            db_res = []
+            db_res = []  # Empty for now
             
             try:
                 arxiv_res = future_arxiv.result(timeout=ARXIV_TIMEOUT + 1)
@@ -367,14 +408,17 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
             except Exception as e:
                 print(f"Scholar future error: {e}")
             
-            try:
-                db_res = future_db.result(timeout=5)
-            except Exception as e:
-                print(f"DB future error: {e}")
+            # Disable DB fetch temporarily
+            # try:
+            #     db_res = future_db.result(timeout=5)
+            # except Exception as e:
+            #     print(f"DB future error: {e}")
 
         # Deduplicate by URL or title
         seen = set()
-        combined = []
+        arxiv_final = []
+        scholar_final = []
+        db_final = []
 
         def normalize_key(doc):
             url = (doc.get("url") or "").strip()
@@ -383,31 +427,27 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
                 return url
             return title
 
-        # Priority: DB first (already analyzed), then arXiv, then Scholar
-        for doc in (db_res or []):
-            key = normalize_key(doc)
-            if key and key not in seen:
-                seen.add(key)
-                combined.append(doc)
-            if len(combined) >= desired_num:
-                return combined[:desired_num]
-
+        # Separate by source while deduplicating
         for doc in (arxiv_res or []):
             key = normalize_key(doc)
             if key and key not in seen:
                 seen.add(key)
-                combined.append(doc)
-            if len(combined) >= desired_num:
-                return combined[:desired_num]
+                arxiv_final.append(doc)
 
         for doc in (scholar_res or []):
             key = normalize_key(doc)
             if key and key not in seen:
                 seen.add(key)
-                combined.append(doc)
-            if len(combined) >= desired_num:
-                return combined[:desired_num]
+                scholar_final.append(doc)
 
+        for doc in (db_res or []):
+            key = normalize_key(doc)
+            if key and key not in seen:
+                seen.add(key)
+                db_final.append(doc)
+
+        # Combine: arXiv first, then Scholar, then DB
+        combined = arxiv_final + scholar_final + db_final
         return combined[:desired_num]
 
     # ========================================
@@ -483,11 +523,26 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
         scored = score_docs_concurrently(processed_docs)
         enriched = []
         for doc, trl_val, justification in scored:
+            # Ensure TRL is valid integer
+            if isinstance(trl_val, float) and (trl_val != trl_val):  # NaN check
+                trl_val = 1
+            if not isinstance(trl_val, int):
+                try:
+                    trl_val = int(trl_val)
+                except:
+                    trl_val = 1
+            
             doc["TRL"] = trl_val
             if not doc.get("TRL_justification"):
                 doc["TRL_justification"] = justification
             if not doc.get("funding_details"):
                 doc["funding_details"] = "0"
+            
+            # Clean all numeric fields
+            for k, v in list(doc.items()):
+                if isinstance(v, float) and (v != v):  # NaN
+                    doc[k] = None
+            
             enriched.append(doc)
         
         # Save to database
@@ -527,6 +582,20 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
         try:
             num = int(request.args.get("n", "5"))
             result = run_analysis_pipeline(topic, num_documents=num)
+            
+            # Clean NaN values before returning JSON
+            def clean_nan(obj):
+                if isinstance(obj, dict):
+                    return {k: clean_nan(v) for k, v in obj.items()}
+                elif isinstance(obj, list):
+                    return [clean_nan(item) for item in obj]
+                elif isinstance(obj, float):
+                    if obj != obj:  # NaN check
+                        return None
+                    return obj
+                return obj
+            
+            result = clean_nan(result)
             return jsonify(result), 200
         except Exception as e:
             import traceback
@@ -549,8 +618,9 @@ Respond in JSON format with keys: TRL, TRL_justification, technologies, funding_
     return app
 
 
+app = create_app()
+
 if __name__ == "__main__":
-    app = create_app()
     port = int(os.getenv("API_PORT", 5000))
     print(f"Starting Aetos API Server on port {port}...")
     app.run(debug=True, port=port, host='0.0.0.0')

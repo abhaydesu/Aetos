@@ -53,9 +53,16 @@ function DocumentRow({ doc }) {
               <FiExternalLink className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
           ) : (
-            <h3 className="text-lg font-semibold text-neutral-100">
+            <a
+              href={`https://scholar.google.com/scholar?q=${encodeURIComponent(doc.title)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 text-lg font-semibold text-neutral-100 hover:text-sky-400 transition-colors"
+              title="Search on Google Scholar"
+            >
               {doc.title}
-            </h3>
+              <FiExternalLink className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </a>
           )}
 
           <div className="mt-2 flex items-center gap-2 flex-wrap">
@@ -82,11 +89,24 @@ function DocumentRow({ doc }) {
               Key Technologies
             </h4>
             <ul className="list-disc list-inside space-y-1 text-sm text-neutral-300">
-              {(doc.technologies || []).length > 0 ? (
-                doc.technologies.map((t, i) => <li key={i}>{t}</li>)
-              ) : (
-                <li className="text-neutral-500 list-none italic">None listed</li>
-              )}
+              {(() => {
+                const techs = doc.technologies;
+                if (!techs) {
+                  return <li className="text-neutral-500 list-none italic">None listed</li>;
+                }
+                // Handle if it's a string (comma-separated)
+                if (typeof techs === 'string') {
+                  const techList = techs.split(',').map(t => t.trim()).filter(t => t);
+                  return techList.length > 0 
+                    ? techList.map((t, i) => <li key={i}>{t}</li>)
+                    : <li className="text-neutral-500 list-none italic">None listed</li>;
+                }
+                // Handle if it's already an array
+                if (Array.isArray(techs) && techs.length > 0) {
+                  return techs.map((t, i) => <li key={i}>{t}</li>);
+                }
+                return <li className="text-neutral-500 list-none italic">None listed</li>;
+              })()}
             </ul>
           </div>
           <div>
