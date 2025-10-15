@@ -60,7 +60,7 @@
         }
 
         function fetchAndDisplayDocuments(topic) {
-            const apiURL = `http://127.0.0.1:5000/api/documents/${encodeURIComponent(topic)}`;
+            const apiURL = `https://aetos.onrender.com/api/documents/${encodeURIComponent(topic)}`;
             const tableBody = document.getElementById('table-body');
             const loadingMessage = document.getElementById('loading-message');
             const table = document.getElementById('documents-table');
