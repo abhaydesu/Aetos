@@ -31,25 +31,32 @@ function DocumentRow({ doc }) {
     return Math.abs(hash) % arrayLength;
   };
 
-  // --- MODIFIED: ALWAYS use mock data for the demo ---
-  const country = mockCountries[getDeterministicIndex(doc.id, mockCountries.length)];
-  const funding = mockFunding[getDeterministicIndex(doc.id, mockFunding.length)];
-  // --- END MODIFICATION ---
+  // Use doc.url or doc._id for deterministic mock data
+  const docId = doc.url || doc._id?.$oid || doc.id?.$oid || doc.title;
+
+  const country = mockCountries[getDeterministicIndex(docId, mockCountries.length)];
+  const funding = mockFunding[getDeterministicIndex(docId, mockFunding.length)];
 
   return (
     <div className="bg-neutral-900/70 border border-neutral-800 rounded-lg p-5 transition-all duration-300 hover:border-sky-500/40 hover:bg-neutral-800/50">
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-x-6 gap-y-4">
         
         <div className="lg:col-span-3">
-          <a
-            href={doc.id}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 text-lg font-semibold text-neutral-100 hover:text-sky-400 transition-colors"
-          >
-            {doc.title}
-            <FiExternalLink className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </a>
+          {doc.url ? (
+            <a
+              href={doc.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 text-lg font-semibold text-neutral-100 hover:text-sky-400 transition-colors"
+            >
+              {doc.title}
+              <FiExternalLink className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </a>
+          ) : (
+            <h3 className="text-lg font-semibold text-neutral-100">
+              {doc.title}
+            </h3>
+          )}
 
           <div className="mt-2 flex items-center gap-2 flex-wrap">
             <span

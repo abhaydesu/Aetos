@@ -1,50 +1,40 @@
 // src/services/api.js
-
-const API_BASE_URL = "http://127.0.0.1:5000/api";
+const API_BASE_URL = "http://127.0.0.1:5001/api";
 
 /**
  * Fetches documents for a given topic.
- * @param {string} topic The topic to search for.
- * @returns {Promise<Array>} A promise that resolves to an array of documents.
  */
 export const fetchDocumentsByTopic = async (topic) => {
   const response = await fetch(`${API_BASE_URL}/documents/${encodeURIComponent(topic)}`);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   return response.json();
 };
 
 /**
- * Starts a new analysis job for a given topic.
- * @param {string} topic The topic to analyze.
- * @returns {Promise<Object>} A promise that resolves to the server's response payload.
+ * Starts a new analysis for a given topic.
  */
 export const startAnalysisForTopic = async (topic) => {
   const response = await fetch(`${API_BASE_URL}/analyze/${encodeURIComponent(topic)}`, {
-    method: "POST",
+    method: "POST"
   });
   if (!response.ok) {
-     const errorPayload = await response.json().catch(() => ({ status: response.statusText }));
-     throw new Error(errorPayload?.status || `HTTP error! status: ${response.status}`);
+    const text = await response.text().catch(() => '')
+    let payload = text || response.statusText
+    try { payload = JSON.parse(text) } catch (e) {}
+    throw new Error(payload?.status || payload?.error || payload || `HTTP error! status: ${response.status}`);
   }
   return response.json();
 };
 
 /**
- * Fetches all analytics data from the single synthesis endpoint.
- * @param {string} topic The topic to analyze.
- * @returns {Promise<Object | null>} A promise that resolves to the full analytics payload, or null on error.
+ * Fetches analytics data — here we call analyze and return its payload.
  */
 export const fetchAnalyticsData = async (topic) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/analytics/synthesis/${encodeURIComponent(topic)}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    const payload = await startAnalysisForTopic(topic);
+    return payload;
   } catch (error) {
     console.error("Failed to fetch analytics data:", error);
-    return null; // Return null on error to be handled by the component
+    return null;
   }
 };
