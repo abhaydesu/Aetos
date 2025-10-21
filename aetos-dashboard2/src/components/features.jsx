@@ -1,111 +1,105 @@
-'use client';
+'use-client';
 
 import React from "react";
-import { cardVariant, fadeInUp, stagger } from "./util/constants";
-//eslint-disable-next-line no-unused-vars
+//eslint-disable-next-line
 import { motion } from "framer-motion";
-import FloatingCorners from "./ui/floating-corners";
-import { FiDatabase, FiCpu, FiTrendingUp, } from "react-icons/fi";
-import {  RiGeminiFill } from 'react-icons/ri'
-import { IoSettingsSharp } from 'react-icons/io5'
-export const Features = () => {
+import { BrainCircuit, DatabaseZap, TrendingUp } from "lucide-react";
+
+// Animation variants for the container and items
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const fadeInUp = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
+// Data for the feature cards for easier mapping and maintenance
+const features = [
+  {
+    icon: <DatabaseZap className="h-7 w-7 text-sky-400" />,
+    title: "Automated Data Aggregation",
+    description: "Unify intelligence from global patents, research publications, and industry reports into a single, cohesive view.",
+  },
+  {
+    icon: <BrainCircuit className="h-7 w-7 text-sky-400" />,
+    title: "AI-Powered Strategic Analysis",
+    description: "Leverage advanced LLMs for real-time TRL assessment, relationship mapping, and strategic summary generation.",
+  },
+  {
+    icon: <TrendingUp className="h-7 w-7 text-sky-400" />,
+    title: "Predictive Technology Forecasting",
+    description: "Track technology progression with S-curves, detect market convergence, and receive continuous updates on emerging tech signals.",
+  },
+];
+
+export const FeaturesRedesigned = () => {
   return (
     <motion.section
-      className="py-24"
+      className="py-20 px-4 md:py-28"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
+      variants={staggerContainer}
     >
-      <div className="text-center mb-12">
-        <motion.h3
-          className="text-4xl font-bold tracking-tight"
+      {/* Section Header */}
+      <div className="text-center max-w-2xl mx-auto mb-16">
+        <motion.h2
+          className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 pb-2"
           variants={fadeInUp}
         >
           An End to Fragmented Tech Intelligence
-        </motion.h3>
+        </motion.h2>
         <motion.p
-          className="mt-3 max-w-xl mx-auto text-neutral-400"
+          className="mt-4 text-lg text-neutral-400"
           variants={fadeInUp}
         >
-          Our platform directly addresses the core challenges of modern
-          technology scouting.
+          Our platform directly addresses the core challenges of modern technology scouting.
         </motion.p>
       </div>
 
+      {/* Features Grid */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-3 gap-8"
-        variants={stagger}
+        className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+        variants={staggerContainer}
       >
-        <motion.div
-          variants={cardVariant}
-          whileHover={{ y: -4, scale: 1.01 }}
-          whileTap={{ scale: 0.995 }}
-          className="flex flex-col items-start relative max-w-sm mx-auto bg-neutral-900/50 border border-neutral-800 p-6"
-        >
-          <FloatingCorners />
+        {features.map((feature, index) => (
           <motion.div
-            aria-hidden
-            animate={{ y: [0, -3, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            key={index}
+            variants={fadeInUp}
+            whileHover={{ y: -8, scale: 1.03 }}
+            className="p-8 rounded-xl border border-neutral-800 bg-neutral-900/60 backdrop-blur-sm cursor-pointer"
+            style={{
+              // Adds a subtle radial gradient for depth
+              backgroundImage: 'radial-gradient(circle at top, rgba(14, 165, 233, 0.08), transparent 40%)',
+            }}
           >
-            <IoSettingsSharp  className="h-8 w-8 text-sky-500 mb-4" />
+            {/* Styled Icon Container */}
+            <div className="flex items-center justify-center h-16 w-16 mb-6 rounded-2xl bg-neutral-950/50 border border-neutral-700">
+              {feature.icon}
+            </div>
+            <h3 className="text-xl font-semibold text-neutral-50 mb-3">
+              {feature.title}
+            </h3>
+            <p className="text-neutral-400 leading-relaxed">
+              {feature.description}
+            </p>
           </motion.div>
-          <h4 className="text-xl font-semibold mb-2">
-            Automated Data Aggregation
-          </h4>
-          <p className="text-neutral-400">
-            Unify intelligence from global patents, research publications, and
-            industry reports into a single, cohesive view.
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={cardVariant}
-          whileHover={{ y: -4, scale: 1.01 }}
-          whileTap={{ scale: 0.995 }}
-          className="flex flex-col items-start relative max-w-sm mx-auto bg-neutral-900/50 border border-neutral-800 p-6"
-        >
-          <FloatingCorners />
-          <motion.div
-            aria-hidden
-            animate={{ y: [0, -3, 0] }}
-            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <RiGeminiFill className="h-8 w-8 text-sky-500 mb-4" />
-          </motion.div>
-          <h4 className="text-xl font-semibold mb-2">
-            AI-Powered Strategic Analysis
-          </h4>
-          <p className="text-neutral-400">
-            Leverage advanced LLMs for real-time TRL assessment, relationship
-            mapping, and strategic summary generation, eliminating manual
-            delays.
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={cardVariant}
-          whileHover={{ y: -4, scale: 1.01 }}
-          whileTap={{ scale: 0.995 }}
-          className="flex flex-col items-start relative max-w-sm mx-auto bg-neutral-900/50 border border-neutral-800 p-6"
-        >
-          <FloatingCorners />
-          <motion.div
-            aria-hidden
-            animate={{ y: [0, -3, 0] }}
-            transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <FiTrendingUp className="h-8 w-8 text-sky-500 mb-4" />
-          </motion.div>
-          <h4 className="text-xl font-semibold mb-2">
-            Predictive Technology Forecasting
-          </h4>
-          <p className="text-neutral-400">
-            Track technology progression with S-curves, detect market
-            convergence, and receive continuous updates on emerging tech
-            signals.
-          </p>
-        </motion.div>
+        ))}
       </motion.div>
     </motion.section>
   );

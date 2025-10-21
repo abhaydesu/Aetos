@@ -14,7 +14,7 @@ const fadeInUp = {
     transition: {
       duration: 0.6,
       ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.1, // Add this line to animate children with a 0.1s delay between them
+      staggerChildren: 0.1,
     },
   },
 };

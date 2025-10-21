@@ -5,7 +5,7 @@ import Navbar from "../components/navbar.jsx";
 import KeyCapabilities from "../components/key-capabilities.jsx";
 import FAQs from "../components/FAQs";
 import { Callout } from "../components/Callout";
-import { Features } from "../components/features";
+import { FeaturesRedesigned } from "../components/features";
 import Footer from "../components/footer";
 import { ScrollDownIndicator } from "../components/ui/ScrollDownIndicator";
 import { MagicButton } from "../components/ui/MagicButton.jsx";
@@ -33,7 +33,7 @@ export default function LandingPage() {
         
 
         <KeyCapabilities />
-        <Features />
+        <FeaturesRedesigned />
         <FAQs />
         <Callout />
       </main>

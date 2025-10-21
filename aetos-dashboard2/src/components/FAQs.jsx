@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiPlus, FiMinus, FiChevronDown, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiChevronDown } from "react-icons/fi";
 //eslint-disable-next-line
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -93,11 +93,11 @@ function FAQs() {
                   {faq.question}
                 </span>
                 <motion.div
-                  animate={{ rotate: openFAQ === faq.id ? 180 : 0 }}
+                  animate={{ rotate: openFAQ === faq.id ? 90 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
                   {openFAQ === faq.id ? (
-                    <FiChevronRight className="h-5 w-5 text-sky-400" />
+                    <FiChevronDown className="h-5 w-5 text-sky-400" />
                   ) : (
                     <FiChevronDown className="h-5 w-5 text-sky-400" />
                   )}

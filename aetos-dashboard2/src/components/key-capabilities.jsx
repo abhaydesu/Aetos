@@ -13,9 +13,9 @@ function InteractiveDemo({ src = "/demo-dashboard.png" }) {
   const [hovered, setHovered] = useAtom(hoveredAtom);
 
   const boxes = [
-    { id: "convergence", top: "12%", left: "26.5%", width: "12.5%", height: "3.5%" },
-    { id: "trl", top: "39.5%", left: "66.5%", width: "12.5%", height: "3.5%" },
-    { id: "adoption", top: "78.5%", left: "27.5%", width: "8.3%", height: "3.5%" },
+    { id: "convergence", top: "12%", left: "22.5%", width: "12.5%", height: "3.5%" },
+    { id: "trl", top: "39.5%", left: "72.5%", width: "12.5%", height: "3.5%" },
+    { id: "adoption", top: "78.5%", left: "23.5%", width: "8.3%", height: "3.5%" },
   ];
 
   return (
@@ -86,12 +86,14 @@ function FeatureCard({ title, body, id, icon }) {
       className="flex flex-col items-center text-center relative max-w-sm mx-auto bg-neutral-900/50 border border-neutral-800 p-6 rounded-2xl hover:border-sky-800"
     >
       {/* Render the icon if it exists */}
+      <div className='flex flex-row gap-3 items-center justify-center'>
       {Icon && (
         <div className="bg-neutral-800 p-3 rounded-full mb-4">
             <Icon className="w-6 h-6 text-sky-400" />
         </div>
       )}
       <h4 className="text-xl font-semibold mb-2">{title}</h4>
+      </div>
       <p className="text-neutral-400">{body}</p>
     </motion.div>
   );
@@ -119,7 +121,7 @@ export default function KeyCapabilities() {
       <div className='grid grid-cols-1 lg:grid-cols-4 gap-12 items-start pt-10'>
 
         {/* Interactive demo takes full width on mobile, 3/4 on large screens */}
-        <div className="lg:col-span-3 mx-auto">
+        <div className="lg:col-span-3 mx-auto my-auto">
           <InteractiveDemo />
         </div>
 
